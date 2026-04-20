@@ -1,0 +1,16 @@
+services:
+  sdk:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ..:/app
+    extra_hosts:
+      - "rekrutacja.localhost:host-gateway"
+    networks:
+      - default
+
+networks:
+  default:
+    name: codelabs_default
+    external: true

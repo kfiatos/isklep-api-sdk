@@ -1,0 +1,13 @@
+services:
+    php:
+        image: noclued/rekrutacja:latest
+        ports:
+            - "9000:9001"
+        extra_hosts:
+            - "docker-host.localhost:127.0.0.1"
+    nginx:
+        image: noclued/rekrutacja_nginx:latest
+        ports:
+            - "8091:80"
+        links:
+            - php
