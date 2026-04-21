@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-class GuzzleHttpClientFactory implements HttpClientFactoryInterface
+class GuzzleHttpAdapter implements HttpClientAdapterInterface
 {
     private HttpFactory $factory;
 

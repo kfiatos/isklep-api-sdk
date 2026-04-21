@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ISklep\Api;
 
 use ISklep\Api\Authorisation\AuthorisationInterface;
-use ISklep\Api\Http\HttpClientFactoryInterface;
+use ISklep\Api\Http\HttpClientAdapterInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -16,10 +16,10 @@ final class Client implements ApiClientInterface
     private array $headers = [];
 
     public function __construct(
-        private readonly HttpClientFactoryInterface $httpClient,
-        private readonly AuthorisationInterface $authorisation,
-        private readonly string $baseUri = '',
-        private readonly ?LoggerInterface $logger = null,
+        private readonly HttpClientAdapterInterface $httpClient,
+        private readonly AuthorisationInterface     $authorisation,
+        private readonly string                     $baseUri = '',
+        private readonly ?LoggerInterface           $logger = null,
     ) {}
 
     public function withHeader(string $name, string $value): self

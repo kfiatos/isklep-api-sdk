@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7\Response;
 use ISklep\Api\Authorisation\AuthorisationInterface;
 use ISklep\Api\Client;
 use ISklep\Api\Exceptions\ApiException;
-use ISklep\Api\Http\GuzzleHttpClientFactory;
+use ISklep\Api\Http\GuzzleHttpAdapter;
 use ISklep\Api\Http\Operation;
 use ISklep\Api\JsonResponseDecoder;
 use ISklep\Api\Models\Producer;
@@ -26,7 +26,7 @@ final class ResourceApiTest extends TestCase
         $auth->method('authorise')->willReturnArgument(0);
 
         $client = new Client(
-            new GuzzleHttpClientFactory(new GuzzleHttpClient(['handler' => HandlerStack::create($mockHandler)])),
+            new GuzzleHttpAdapter(new GuzzleHttpClient(['handler' => HandlerStack::create($mockHandler)])),
             $auth,
         );
 
@@ -108,7 +108,7 @@ final class ResourceApiTest extends TestCase
     {
         $auth = $this->createMock(AuthorisationInterface::class);
         $client = new Client(
-            new GuzzleHttpClientFactory(new GuzzleHttpClient(['handler' => HandlerStack::create(new MockHandler())])),
+            new GuzzleHttpAdapter(new GuzzleHttpClient(['handler' => HandlerStack::create(new MockHandler())])),
             $auth,
         );
 

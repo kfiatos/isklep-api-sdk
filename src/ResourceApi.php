@@ -16,7 +16,7 @@ abstract class ResourceApi
 {
     public function __construct(
         protected readonly ApiClientInterface $client,
-        protected readonly ResponseDecoderInterface $decoder = new WrappedResponseDecoder(),
+        protected readonly ResponseDecoderInterface $decoder,
     ) {}
 
     /**

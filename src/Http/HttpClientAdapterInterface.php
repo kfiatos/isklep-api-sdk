@@ -8,7 +8,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-interface HttpClientFactoryInterface extends
+interface HttpClientAdapterInterface extends
     ClientInterface,
     RequestFactoryInterface,
     StreamFactoryInterface {}

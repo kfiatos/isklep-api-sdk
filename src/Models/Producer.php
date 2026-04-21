@@ -30,11 +30,10 @@ final class Producer extends AbstractModel
      */
     public static function fromArray(array $data): self
     {
-        /* can be added if more validation is needed
-            if (!isset($data['name']) || $data['name'] === '') {
-                throw new DeserializationException('Producer name is required');
-            }
-        */
+        if (!isset($data['name']) || $data['name'] === '') {
+            throw new DeserializationException('Producer name is required');
+        }
+
 
         return new self(
             id: $data['id'] ?? null,

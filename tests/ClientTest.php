@@ -13,8 +13,9 @@ use ISklep\Api\Authorisation\AuthorisationInterface;
 use ISklep\Api\Client;
 use ISklep\Api\Exceptions\HttpException;
 use ISklep\Api\Exceptions\UnauthorizedException;
-use ISklep\Api\Http\GuzzleHttpClientFactory;
+use ISklep\Api\Http\GuzzleHttpAdapter;
 use ISklep\Api\Models\Producer;
+use ISklep\Api\WrappedResponseDecoder;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -22,7 +23,7 @@ class ClientTest extends TestCase
     private function createClient(MockHandler $mockHandler, ?AuthorisationInterface $authorisation = null): Client
     {
         $guzzleClient = new GuzzleHttpClient(['handler' => HandlerStack::create($mockHandler)]);
-        $httpClientFactory = new GuzzleHttpClientFactory($guzzleClient);
+        $httpClientFactory = new GuzzleHttpAdapter($guzzleClient);
 
         if ($authorisation === null) {
             $authorisation = $this->createMock(AuthorisationInterface::class);
@@ -49,7 +50,7 @@ class ClientTest extends TestCase
         ];
 
         $mock = new MockHandler([new Response(200, [], json_encode($responseData))]);
-        $api = new ProducersApi($this->createClient($mock));
+        $api = new ProducersApi($this->createClient($mock), new WrappedResponseDecoder());
         $result = $api->list();
 
         $this->assertIsArray($result);
@@ -74,7 +75,7 @@ class ClientTest extends TestCase
         ];
 
         $mock = new MockHandler([new Response(201, [], json_encode($responseData))]);
-        $api = new ProducersApi($this->createClient($mock));
+        $api = new ProducersApi($this->createClient($mock), new WrappedResponseDecoder());
 
         $result = $api->create(new Producer(
             id: null,
@@ -93,7 +94,7 @@ class ClientTest extends TestCase
     public function testThrowsUnauthorizedException(): void
     {
         $mock = new MockHandler([new Response(401, [], '{"error": "Unauthorized"}')]);
-        $api = new ProducersApi($this->createClient($mock));
+        $api = new ProducersApi($this->createClient($mock), new WrappedResponseDecoder());
 
         $this->expectException(UnauthorizedException::class);
         $api->list();
@@ -109,7 +110,7 @@ class ClientTest extends TestCase
             ],
         ]);
         $mock = new MockHandler([new Response(400, [], (string) $responseBody)]);
-        $api = new ProducersApi($this->createClient($mock));
+        $api = new ProducersApi($this->createClient($mock), new WrappedResponseDecoder());
 
         try {
             $api->list();
@@ -130,6 +131,6 @@ class ClientTest extends TestCase
         ]);
 
         $client = $this->createClient($mock)->withHeader('Host', 'rekrutacja.localhost');
-        (new ProducersApi($client))->list();
+        (new ProducersApi($client, new WrappedResponseDecoder()))->list();
     }
 }

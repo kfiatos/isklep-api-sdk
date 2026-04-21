@@ -9,7 +9,7 @@ use ISklep\Api\Api\ProducersApi;
 use ISklep\Api\Authorisation\BasicAuthorisation;
 use ISklep\Api\Client;
 use ISklep\Api\Exceptions\ApiException;
-use ISklep\Api\Http\GuzzleHttpClientFactory;
+use ISklep\Api\Http\GuzzleHttpAdapter;
 use ISklep\Api\JsonResponseDecoder;
 use ISklep\Api\Models\Producer;
 
@@ -19,7 +19,7 @@ $password = '!'; //fill with proper credentials
 
 $authorisation = new BasicAuthorisation($username, $password);
 $guzzleClient = new GuzzleHttpClient(['http_errors' => false]);
-$httpClientFactory = new GuzzleHttpClientFactory($guzzleClient);
+$httpClientFactory = new GuzzleHttpAdapter($guzzleClient);
 
 $client = new Client(
     httpClient: $httpClientFactory,

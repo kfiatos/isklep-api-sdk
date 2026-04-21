@@ -124,12 +124,12 @@ i tyle. Nie potrzeba nic więcej.
 ```php
 use ISklep\Api\Client;
 use ISklep\Api\Authorisation\BasicAuthorisation;
-use ISklep\Api\Http\GuzzleHttpClientFactory;
+use ISklep\Api\Http\GuzzleHttpAdapter;
 use ISklep\Api\JsonResponseDecoder;
 use GuzzleHttp\Client as GuzzleHttpClient;
 
 $client = new Client(
-    httpClient: new GuzzleHttpClientFactory(new GuzzleHttpClient()),
+    httpClient: new GuzzleHttpAdapter(new GuzzleHttpClient()),
     authorisation: new BasicAuthorisation('login', 'haslo'),
     baseUri: 'http://rekrutacja.localhost:8091',
 );
@@ -149,7 +149,7 @@ Biblioteka ma dwa dekodery i mozna łatwo dołożyć własny przez implementacj�
 | `JsonResponseDecoder` | API zwraca plain JSON (tak działa ISklep API)             |
 | `WrappedResponseDecoder` | API wrappuje odpowiedź w `{"success": true, "data": ...}` |
 
-Domyślnie `ResourceApi` używa `WrappedResponseDecoder` — jezeli API zwraca dane bezpośrednio to trzeba przekazać dekoder explicite jak w przykładzie wyżej.
+Dekoder trzeba zawsze przekazac explicite — brak domyślnej wartości, żeby uniknąć sytuacji gdzie zły dekoder rzuca wyjątek zamiast dać czytelny błąd. Dla ISklep API używaj `JsonResponseDecoder`.
 
 ### Obsługa błędów
 
@@ -174,7 +174,7 @@ try {
 ## Co można jeszcze zrobić
 
 - **Logowanie** — `Client` ma już opcjonalny `LoggerInterface` wystarczy go przekazać (lub nie), pomocne przy impelemntacji biblioteki
-- **Inne implementacje HTTP** — `HttpClientFactoryInterface` implementuje PSR-17 + PSR-18, mozna podmienić Guzzle na Symfony HttpClient bez zmian w reszcie kodu
+- **Inne implementacje HTTP** — `HttpClientAdapterInterface` implementuje PSR-17 + PSR-18, mozna podmienić Guzzle na Symfony HttpClient bez zmian w reszcie kodu
 - **Cache** — GET-y można owinąć w PSR-6 cache
 - **Paginacja** — `list()` przyjmuje `$params` więc mozna przekazać np `page` i `per_page`
 
